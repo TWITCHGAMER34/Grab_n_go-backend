@@ -1,6 +1,6 @@
 const express = require('express');
 
-module.exports = function(knex) {
+module.exports = function (knex) {
     const router = express.Router();
 
     // GET /menu  -> returns categories with nested items

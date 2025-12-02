@@ -10,6 +10,8 @@ app.use(express.json());
 
 // mount menu routes
 app.use('/menu', require('./routes/menu')(knex));
+// mount auth routes
+app.use('/auth', require('./routes/auth')(knex));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

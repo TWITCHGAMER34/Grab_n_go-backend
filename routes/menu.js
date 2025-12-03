@@ -12,7 +12,7 @@ module.exports = function (knex) {
 
             const items = await knex('menu_items')
                 //Not including image field in the response for performance reasons
-                .select('id', 'category_id', 'name', 'description', 'available', 'position', 'price')
+                .select('id', 'category_id', 'name', 'description', 'available', 'position', 'price', 'image')
                 .orderBy(['category_id', 'position']);
 
             const result = categories.map(cat => ({

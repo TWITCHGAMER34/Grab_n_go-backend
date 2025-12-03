@@ -1,25 +1,34 @@
-const express = require('express');
-const knexLib = require('knex');
-const path = require('path');
-const createSession = require('./middlewares/session');
+// javascript
 require('dotenv').config();
-
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const knexLib = require('knex');
+const createSession = require('./middlewares/session');
+const authRoutes = require('./routes/auth');
+const knexConfig = require('./knexfile.js');
 
 const env = process.env.NODE_ENV || 'development';
-const knexConfig = require('./knexfile')[env];
-const knex = knexLib(knexConfig);
+const knex = knexLib(knexConfig[env] || knexConfig); // create a Knex instance from the config
+
+const menuRoutes = require('./routes/menu')(knex);
 
 const app = express();
 app.use(express.json());
-app.use(createSession());
 
-// mount auth routes
-app.use('/auth', require('./routes/auth')(knex));
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-// mount menu routes
-app.use('/menu', require('./routes/menu')(knex));
+app.use(cors(corsOptions));
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server listening on http://localhost:${port}`);
-});
+// provide a session secret so the middleware can create sessions
+app.use(createSession({ secret: process.env.SESSION_SECRET || 'change-me' }));
+
+app.use('/auth', authRoutes);
+app.use('/menu', menuRoutes);
+
+app.listen(3000, () => console.log('Server listening on port 3000'));

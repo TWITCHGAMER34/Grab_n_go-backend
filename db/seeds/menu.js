@@ -9,11 +9,10 @@ exports.seed = async function(knex) {
     const now = new Date();
 
     const categories = [
-        { id: 1, name: 'Burgers', description: 'Classic & specialty burgers', position: 1 },
-        { id: 2, name: 'Salads', description: 'Fresh salads and bowls', position: 2 },
-        { id: 3, name: 'Drinks', description: 'Soft drinks, coffee and tea', position: 3 },
-        { id: 4, name: 'Sides', description: 'Fries, nuggets and extras', position: 4 },
-        { id: 5, name: 'Desserts', description: 'Sweet treats', position: 5 }
+        { id: 1, name: 'HuvudRätter', description: 'Huvudrätter', position:1  },
+        { id: 2, name: 'Tillbehör', description: 'Tillbehör', position:2  },
+        { id: 3, name: 'Drycker', description: 'Drycker', position:3  },
+        { id: 4, name: 'Desserter', description: 'Desserter', position:4  }
     ];
 
     await knex('menu_categories').insert(categories);
@@ -29,22 +28,25 @@ exports.seed = async function(knex) {
     }
 
     const items = [
-        { category_id: 1, name: 'Classic Burger', description: 'Beef patty, lettuce, tomato, onion, house sauce', price: 99, available: true, position: 1, image: readImageBuffer('classic-burger.png'), created_at: now, updated_at: now },
-        { category_id: 1, name: 'Cheese Burger', description: 'Classic + cheddar', price: 109, available: true, position: 2, image: readImageBuffer('cheese-burger.png'), created_at: now, updated_at: now },
-        { category_id: 1, name: 'Veggie Burger', description: 'Seasonal veggie patty, vegan mayo', price: 95, available: true, position: 3, image: readImageBuffer('veggie-burger.png'), created_at: now, updated_at: now },
+        { category_id: 1, name: 'Spicy Korean Bowl', description: 'Gochujang glazed chicken, jasmine rice, kimchi, pickled veg, sesame', price: 135, available: true, position: 1, image: readImageBuffer('Bowl.png'), created_at: now, updated_at: now },
+        { category_id: 1, name: 'Teriyaki Salmon', description: 'Grilled salmon, teriyaki glaze, edamame, brown rice, miso dressing', price: 155, available: true, position: 1, image: readImageBuffer('Salmon.png'), created_at: now, updated_at: now },
+        { category_id: 1, name: 'Vietnamese Banh Mi', description: 'Crispy pork belly, pickled carrots, cilantro, jalapeños, sriracha mayo', price: 115, available: true, position: 1, image: readImageBuffer('Banh.png'), created_at: now, updated_at: now },
+        { category_id: 1, name: 'Green Curry', description: 'Coconut green curry, tofu, Thai basil, vegetables, jasmine rice', price: 125, available: true, position: 1, image: readImageBuffer('Curry.png'), created_at: now, updated_at: now },
+        { category_id: 1, name: 'Poke Bowl', description: 'Ahi tuna, avocado, edamame, seaweed salad, ponzu, sesame seeds', price: 145, available: true, position: 1, image: readImageBuffer('PokeBowl.png'), created_at: now, updated_at: now },
+        { category_id: 1, name: 'Crispy Duck Noodles', description: 'Crispy duck, stir-fried noodles, bok choy, hoisin sauce', price: 140, available: true, position: 1, image: readImageBuffer('Duck.png'), created_at: now, updated_at: now },
 
-        { category_id: 2, name: 'Caesar Salad', description: 'Romaine, parmesan, croutons, caesar dressing', price: 13, available: true, position: 1, image: readImageBuffer('caesar-salad.png'), created_at: now, updated_at: now },
-        { category_id: 2, name: 'Greek Salad', description: 'Tomato, cucumber, feta, olives', price: 12, available: true, position: 2, image: readImageBuffer('greek-salad.png'), created_at: now, updated_at: now },
+        { category_id: 2, name: 'Gyoza', description: 'Pan-fried dumplings with soy-ginger dipping sauce', price: 65, available: true, position: 2, image: readImageBuffer('Gyoza.png'), created_at: now, updated_at: now },
+        { category_id: 2, name: 'Edamame', description: 'Steamed soybeans with sea salt', price: 45, available: true, position: 2, image: readImageBuffer('Edamame.png'), created_at: now, updated_at: now },
+        { category_id: 2, name: 'Spring Rolls', description: 'Fresh spring rolls with peanut dipping sauce', price: 55, available: true, position: 2, image: readImageBuffer('SpringRolls.png'), created_at: now, updated_at: now },
+        { category_id: 2, name: 'Kimchi Fries', description: 'Crispy fries topped with kimchi and spicy mayo', price: 70, available: true, position: 2, image: readImageBuffer('Kimchi.png'), created_at: now, updated_at: now },
 
-        { category_id: 3, name: 'Coca-Cola (330ml)', description: null, price: 3, available: true, position: 1, image: readImageBuffer('coke-330.png'), created_at: now, updated_at: now },
-        { category_id: 3, name: 'Latte', description: 'Medium, freshly brewed', price: 4, available: true, position: 2, image: readImageBuffer('latte.png'), created_at: now, updated_at: now },
-        { category_id: 3, name: 'Bottled Water', description: null, price: 2, available: true, position: 3, image: readImageBuffer('bottled-water.png'), created_at: now, updated_at: now },
+        { category_id: 3, name: 'Yuzu Lemonade', description: 'Refreshing citrus drink with Japanese yuzu', price: 45, available: true, position: 3, image: readImageBuffer('Yuzu.png'), created_at: now, updated_at: now },
+        { category_id: 3, name: 'Thai Iced Tea', description: 'Sweet and creamy traditional Thai tea', price: 45, available: true, position: 3, image: readImageBuffer('IceTea.png'), created_at: now, updated_at: now },
+        { category_id: 3, name: 'Kombucha', description: 'House-made ginger and lime kombucha', price: 50, available: true, position: 3, image: readImageBuffer('Kombucha.png'), created_at: now, updated_at: now },
+        { category_id: 3, name: 'Matcha Latte', description: 'Premium matcha with oat milk', price: 55, available: true, position: 3, image: readImageBuffer('MatchaLatte.png'), created_at: now, updated_at: now },
 
-        { category_id: 4, name: 'Fries', description: 'Crispy salted fries', price: 3, available: true, position: 1, image: readImageBuffer('fries.png'), created_at: now, updated_at: now },
-        { category_id: 4, name: 'Onion Rings', description: 'Battered onion rings', price: 3, available: true, position: 2, image: readImageBuffer('onion-rings.png'), created_at: now, updated_at: now },
-
-        { category_id: 5, name: 'Chocolate Brownie', description: 'Warm brownie with ice cream', price: 5, available: true, position: 1, image: readImageBuffer('chocolate-brownie.png'), created_at: now, updated_at: now },
-        { category_id: 5, name: 'Cheesecake', description: 'Classic baked cheesecake', price: 5, available: true, position: 2, image: readImageBuffer('cheesecake.png'), created_at: now, updated_at: now }
+        { category_id: 4, name: 'Mochi Ice Cream', description: 'Four pieces - 2 mango and 2 matcha', price: 65, available: true, position: 4, image: readImageBuffer('Mochi.png'), created_at: now, updated_at: now },
+        { category_id: 4, name: 'Matcha Tiramisu', description: 'Japanese twist on Italian classic', price: 75, available: true, position: 4, image: readImageBuffer('Tiramisu.png'), created_at: now, updated_at: now }
     ];
 
     // remove image fields that are null to avoid inserting explicit nulls if file missing

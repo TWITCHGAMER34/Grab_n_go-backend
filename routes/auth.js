@@ -70,6 +70,20 @@ module.exports = function (knex) {
         }
     });
 
+    router.get('/user', (req, res) => {
+        if (req.session.user) {
+            res.json({ user: req.session.user });
+        }
+    })
+
+    router.get('/check-session', (req, res) => {
+        if (req.session.user) {
+            res.json({ loggedIn: true, user: req.session.user });
+        } else {
+            res.json({ loggedIn: false });
+        }
+    })
+
     // POST /auth/logout
     router.post('/logout', (req, res) => {
         req.session.destroy(err => {

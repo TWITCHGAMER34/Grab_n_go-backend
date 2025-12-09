@@ -103,6 +103,32 @@ module.exports = function (knex) {
         }
     });
 
+    router.post('/addComment/:orderId', isStaffMiddleware, async (req, res) => {
+        const { orderId } = req.params;
+        const { comment } = req.body;
+
+        if (!comment || typeof comment !== 'string' || comment.trim() === '') {
+            return res.status(400).json({ error: 'Comment is required and must be a non-empty string' });
+        }
+
+        try {
+            const order = await knex('orders').where({ id: orderId }).first();
+            if (!order) {
+                return res.status(404).json({ error: 'Order not found' });
+            }
+
+            await knex('orders')
+                .where({ id: orderId })
+                .update({ staff_note: comment.trim() });
+
+            return res.json({ message: 'Comment added successfully' });
+        } catch (err) {
+            console.error('Error adding comment to order:', err);
+            return res.status(500).json({ error: 'Failed to add comment to order' });
+        }
+    })
+
+
 
     return router;
 };

@@ -6,7 +6,6 @@ const knexLib = require('knex');
 const createSession = require('./middlewares/session');
 const authRoutesFactory = require('./routes/auth');
 const knexConfig = require('./knexfile.js');
-const {hashPassword} = require("./utils/password");
 
 const env = process.env.NODE_ENV || 'development';
 const knex = knexLib(knexConfig[env] || knexConfig); // create a Knex instance from the config
@@ -14,6 +13,7 @@ const knex = knexLib(knexConfig[env] || knexConfig); // create a Knex instance f
 const authRoutes = authRoutesFactory(knex);
 const menuRoutes = require('./routes/menu')(knex);
 const orderRoutes = require('./routes/orders')(knex);
+const staffRoutes = require('./routes/staff')(knex);
 
 const app = express();
 app.use(express.json());
@@ -34,6 +34,7 @@ app.use(createSession({secret: process.env.SESSION_SECRET || 'Keyboard Cat'}));
 app.use('/auth', authRoutes);
 app.use('/menu', menuRoutes);
 app.use('/orders', orderRoutes);
+app.use('/staff', staffRoutes);
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');

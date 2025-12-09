@@ -71,10 +71,12 @@ module.exports = function (knex) {
     });
 
     router.get('/user', (req, res) => {
-        if (req.session.user) {
-            res.json({ user: req.session.user });
+        // Always return a response — null when no user in session
+        if (!req.session) {
+            return res.status(200).json({ user: null });
         }
-    })
+        return res.status(200).json({ user: req.session.user ?? null });
+    });
 
     router.get('/check-session', (req, res) => {
         if (req.session.user) {

@@ -366,7 +366,6 @@ module.exports = function (knex) {
         }
     });
 
-
     // DELETE /orders/:id
     // Body shape:
     // {

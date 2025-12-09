@@ -128,6 +128,52 @@ module.exports = function (knex) {
         }
     })
 
+    router.post('/lock-order/:orderId', isStaffMiddleware, async (req, res) => {
+        const { orderId } = req.params;
+
+        try {
+            const order = await knex('orders').where({ id: orderId }).first();
+            if (!order) {
+                return res.status(404).json({ error: 'Order not found' });
+            }
+
+            await knex('orders')
+                .where({ id: orderId })
+                .update({ locked: true, status: 'in_kitchen' });
+
+            return res.json({ message: 'Order locked successfully' });
+        }
+        catch (err) {
+            console.error('Error locking order:', err);
+            return res.status(500).json({ error: 'Failed to lock order' });
+        }
+    })
+
+    router.patch('/status/:id', isStaffMiddleware, async (req, res) => {
+        const orderId = Number(req.params.id);
+        const { status } = req.body || {};
+
+        if (!orderId || Number.isNaN(orderId)) {
+            return res.status(400).json({ error: 'Invalid order id' });
+        }
+        const validStatuses = ['pending','in_kitchen','ready','completed','cancelled'];
+        if (typeof status !== 'string' || !validStatuses.includes(status)) {
+            return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
+        }
+
+        try {
+            const updated = await knex('orders').where('id', orderId).update({ status }).returning('*');
+            const updatedOrder = Array.isArray(updated) ? updated[0] : updated;
+            if (!updatedOrder) {
+                return res.status(404).json({ error: 'Order not found' });
+            }
+            return res.status(200).json({ order: updatedOrder });
+        } catch (err) {
+            console.error('Error updating order status:', err);
+            return res.status(500).json({ error: 'Failed to update order status' });
+        }
+    })
+
 
 
     return router;

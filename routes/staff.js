@@ -167,12 +167,41 @@ module.exports = function (knex) {
             if (!updatedOrder) {
                 return res.status(404).json({ error: 'Order not found' });
             }
+
+            // If status moved to completed, schedule removal after 5 seconds
+            if (status === 'completed') {
+                setTimeout(async () => {
+                    try {
+                        // verify order still exists and is still completed
+                        const current = await knex('orders').where({ id: orderId }).first();
+                        if (!current) {
+                            console.log(`Order ${orderId} already removed before scheduled deletion.`);
+                            return;
+                        }
+                        if (current.status !== 'completed') {
+                            console.log(`Order ${orderId} status changed to ${current.status}; skipping deletion.`);
+                            return;
+                        }
+
+                        // delete order items and the order in a transaction
+                        await knex.transaction(async trx => {
+                            await trx('order_items').where({ order_id: orderId }).del();
+                            await trx('orders').where({ id: orderId }).del();
+                        });
+
+                        console.log(`Order ${orderId} and its items removed after completion.`);
+                    } catch (err) {
+                        console.error(`Error removing completed order ${orderId}:`, err);
+                    }
+                }, 60000);
+            }
+
             return res.status(200).json({ order: updatedOrder });
         } catch (err) {
             console.error('Error updating order status:', err);
             return res.status(500).json({ error: 'Failed to update order status' });
         }
-    })
+    });
 
 
 

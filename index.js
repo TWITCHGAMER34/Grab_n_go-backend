@@ -1,45 +1,41 @@
-/**
- * Knex configuration for the project environments.
- *
- * - development: uses the `better-sqlite3` client with a local SQLite file.
- * - Enables SQLite foreign key enforcement via `PRAGMA foreign_keys = ON`.
- * - Configures migration and seed directories and sensible defaults for SQLite.
- *
- * Used by `index.js` where the current NODE_ENV selects the appropriate config.
- */
-const path = require('path');
+// javascript
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const knexLib = require('knex');
+const createSession = require('./middlewares/session');
+const authRoutesFactory = require('./routes/auth');
+const knexConfig = require('./knexfile.js');
 
-module.exports = {
-    development: {
-        // Use the faster native sqlite3 binding via better-sqlite3
-        client: 'better-sqlite3',
+const env = process.env.NODE_ENV || 'development';
+const knex = knexLib(knexConfig[env] || knexConfig); // create a Knex instance from the config
 
-        // Points to the SQLite file used for the development DB
-        connection: {
-            filename: path.resolve(__dirname, './db/dev.sqlite3')
-        },
+const authRoutes = authRoutesFactory(knex);
+const menuRoutes = require('./routes/menu')(knex);
+const orderRoutes = require('./routes/orders')(knex);
+const staffRoutes = require('./routes/staff')(knex);
 
-        // SQLite adapters commonly require this when using column defaults
-        useNullAsDefault: true,
+const app = express();
+app.use(express.json());
 
-        // Where to find migration files for schema changes
-        migrations: {
-            directory: path.resolve(__dirname, './db/migrations')
-        },
-
-        // Where to find seed files for populating test/dev data
-        seeds: {
-            directory: path.resolve(__dirname, './db/seeds')
-        },
-
-        // Pool hooks — used here to enable SQLite foreign key enforcement
-        pool: {
-            afterCreate: (conn, done) => {
-                // Ensure foreign key constraints are enforced for each new connection
-                conn.pragma('foreign_keys = ON');
-                // Signal that the connection setup is complete
-                done(null, conn);
-            }
-        }
-    }
+const corsOptions = {
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT','PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 };
+
+app.use(cors(corsOptions));
+
+// provide a session secret so the middleware can create sessions
+app.use(createSession({secret: process.env.SESSION_SECRET || 'Keyboard Cat'}));
+
+
+app.use('/auth', authRoutes);
+app.use('/menu', menuRoutes);
+app.use('/orders', orderRoutes);
+app.use('/staff', staffRoutes);
+
+app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000');
+})

@@ -1,0 +1,11 @@
+services:
+  grabngo_backend:
+    image: registry.sasvirtual.se/grabngo_backend
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8096:3000"
+    environment:
+      - "FRONTEND_URL=https://grabngo.sasvirtual.se"

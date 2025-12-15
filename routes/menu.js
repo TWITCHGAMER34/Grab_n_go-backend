@@ -1,4 +1,3 @@
-// javascript
 /**
  * Routes for menu data: returns menu categories with nested items.
  *

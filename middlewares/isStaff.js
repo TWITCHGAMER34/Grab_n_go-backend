@@ -1,4 +1,3 @@
-// javascript
 /**
  * Express middleware that ensures the current request is authenticated and the user
  * has a `staff` role.

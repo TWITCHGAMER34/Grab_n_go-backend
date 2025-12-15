@@ -1,4 +1,3 @@
-// javascript
 /**
  * Knex configuration for the project environments.
  *

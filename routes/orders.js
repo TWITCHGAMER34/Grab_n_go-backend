@@ -1,4 +1,3 @@
-javascript
 /**
  * Orders routes: create, list, fetch, update, and delete orders.
  *

@@ -1,4 +1,3 @@
-// javascript
 /**
  * Express middleware that verifies an authenticated session and attaches a sanitized
  * user object to `req.user`.

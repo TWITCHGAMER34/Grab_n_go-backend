@@ -1,4 +1,3 @@
-// javascript
 /**
  * Staff routes: authentication and staff-only order management.
  *

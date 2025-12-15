@@ -1,4 +1,3 @@
-// javascript
 /**
  * Authentication routes for user registration, login, session inspection, and logout.
  *

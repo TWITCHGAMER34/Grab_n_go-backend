@@ -27,7 +27,7 @@ module.exports = function (knex) {
 
             // Load items and omit any large/binary fields (e.g. image) to keep responses small
             const items = await knex('menu_items')
-                .select('id', 'category_id', 'name', 'description', 'available', 'position', 'price')
+                .select('id', 'category_id', 'name', 'description', 'available', 'position', 'price', 'image')
                 .orderBy(['category_id', 'position']);
 
             // Group items under their category; preserve category ordering
